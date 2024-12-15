@@ -1,16 +1,20 @@
 from application.interfaces.repositories.business import IBusinessRepository
 
-from infrastructure.dbs.postgresql.models.businesses import Business
+from infrastructure.dbs.postgresql.models import Business
+from .base import BaseRepository
 
-class BusinessRepository(IBusinessRepository):
-	collection = Business
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
+class BusinessRepository(IBusinessRepository, BaseRepository):
+	table = Business
 	
-	def is_have_business(self, tg_user_id):
-		data = self.collection.find_one({"tg_user_id": str(tg_user_id)})
-		if data:
-			return True
-		
-	def get_businesses_by_user_id(self, tg_user_id):
+	async def get_businesses_by_user_id(self, tg_user_id: int, session: AsyncSession):
 		print("запрос")
-		businesses = self.collection.find({"tg_user_id": str(tg_user_id)})
-		return businesses.to_list()
+		res = await session.execute(
+			  select(self.table).where(
+				self.table.owner_id == tg_user_id,
+			)
+		)
+		print(res)

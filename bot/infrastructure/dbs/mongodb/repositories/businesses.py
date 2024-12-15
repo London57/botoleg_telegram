@@ -10,6 +10,5 @@ class BusinessRepository():
 			return True
 		
 	def get_businesses_by_user_id(self, tg_user_id):
-		print("запрос")
 		businesses = self.collection.find({"tg_user_id": str(tg_user_id)})
 		return businesses.to_list()

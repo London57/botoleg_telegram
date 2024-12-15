@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 import toml
 
 
-config = toml.load("src/infrastructure/db/postgresql/options/config.toml")
+config = toml.load("infrastructure/dbs/postgresql/options/config.toml")
 database_config = config.get("PostgreSQL")
 
 
